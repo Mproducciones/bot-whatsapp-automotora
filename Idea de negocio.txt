@@ -1,0 +1,6 @@
+El modelo de negocio en simple
+Tienes un producto que resuelve un problema real: automotoras que pierden clientes fuera del horario. La estrategia es:
+Mes 1: instalarlo gratis en Marco Yáñez Langer. Documentas conversaciones reales del bot atendiendo clientes.
+Mes 2 en adelante: con ese caso de éxito, vas a otras automotoras de Rancagua, Talca, Santiago. Les muestras el bot en vivo, les cobras $50.000-80.000 CLP/mes. Tú pagas $5 USD, recibes $50.000+.
+Con 10 clientes ya tienes ~$600.000/mes con prácticamente cero operación de tu parte, porque el inventario lo actualiza la automotora en su propia Google Sheet.
+El NEGOCIO_Y_SETUP.md tiene el roadmap completo incluyendo cómo pasar de 1 a 50 clientes y cuándo conviene tener servidor propio.
