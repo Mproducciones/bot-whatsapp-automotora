@@ -14,6 +14,7 @@ from typing import Dict, List, Optional
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
+from storage import storage
 
 load_dotenv()
 
@@ -33,10 +34,10 @@ app = FastAPI(title="Agente Ventas Simplificado - Marco Yáñez Langer")
 
 class SistemaProteccion:
     def __init__(self):
-        self.conversaciones = {}
-        self.ventas_atribuidas = {}
+        self.conversaciones = storage.get_conversaciones()
+        self.ventas_atribuidas = storage.get_ventas()
         self.licencias = {}
-        self.alertas_fraude = []
+        self.alertas_fraude = storage.get_alertas()
         self.backup_datos = []
     
     def generar_codigo_seguimiento(self, numero_cliente):
@@ -64,6 +65,9 @@ class SistemaProteccion:
             "datos": self.conversaciones[conv_id],
             "timestamp": datetime.now()
         })
+        
+        # Guardar persistentemente
+        storage.save_conversaciones(self.conversaciones)
         
         return conv_id, codigo
     
@@ -101,6 +105,10 @@ class SistemaProteccion:
             # Marcar conversación como convertida
             for conv in conversaciones_cliente:
                 conv["atribucion_venta"] = venta_id
+            
+            # Guardar persistentemente
+            storage.save_conversaciones(self.conversaciones)
+            storage.save_ventas(self.ventas_atribuidas)
             
             return {
                 "atribuible": True,
@@ -156,12 +164,16 @@ class SistemaProteccion:
             alertas.append("EVASION_COMISIONES")
         
         if alertas:
-            self.alertas_fraude.append({
+            nueva_alerta = {
                 "cliente_id": cliente_id,
                 "alertas": alertas,
                 "timestamp": datetime.now(),
                 "metrics": metrics
-            })
+            }
+            self.alertas_fraude.append(nueva_alerta)
+            
+            # Guardar persistentemente
+            storage.save_alertas(self.alertas_fraude)
         
         return alertas
     
