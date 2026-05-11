@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "name": "bot-whatsapp-automotora",
   "builds": [
     {
       "src": "main_simple.py",
