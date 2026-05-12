@@ -280,16 +280,34 @@ async def chat_endpoint(request):
     """Endpoint para procesar mensajes del chat interactivo"""
     try:
         body = await request.json()
+        
+        # Validación explícita de los campos requeridos
+        if not body:
+            return {
+                "respuesta": "Por favor envía un mensaje válido.",
+                "error": "No se recibieron datos"
+            }
+        
         mensaje = body.get("mensaje", "")
+        if not mensaje or not mensaje.strip():
+            return {
+                "respuesta": "Por favor escribe un mensaje.",
+                "error": "Mensaje vacío"
+            }
+        
         conversation_id = body.get("conversation_id", "")
         historial = body.get("historial", [])
+        
+        # Asegurar que historial sea una lista
+        if not isinstance(historial, list):
+            historial = []
         
         # Buscar información relevante para el contexto
         stock_context = ""
         if any(palabra in mensaje.lower() for palabra in ["auto", "vehiculo", "suv", "camioneta", "sedan", "hatchback"]):
             stock_context = buscar_autos(mensaje)
         
-        respuesta = await consultar_groq_conversacion(mensaje, historial[-5:])  # Últimos 5 mensajes
+        respuesta = await consultar_groq_conversacion(mensaje, historial[-5:] if len(historial) > 0 else [])
         
         return {
             "respuesta": respuesta,
