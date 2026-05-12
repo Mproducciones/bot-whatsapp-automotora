@@ -13,6 +13,10 @@
   ],
   "routes": [
     {
+      "src": "/",
+      "dest": "chat_interactivo.py"
+    },
+    {
       "src": "/test",
       "dest": "main_production.py"
     },
@@ -27,10 +31,6 @@
     {
       "src": "/atribuir_venta",
       "dest": "main_production.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "chat_interactivo.py"
     }
   ],
   "env": {
