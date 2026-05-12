@@ -7,7 +7,7 @@
       "use": "@vercel/python"
     },
     {
-      "src": "chat_interactivo.py",
+      "src": "chat_simple.py",
       "use": "@vercel/python"
     }
   ],
