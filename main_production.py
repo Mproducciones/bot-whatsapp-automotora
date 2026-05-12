@@ -27,14 +27,18 @@ log = logging.getLogger(__name__)
 
 app = FastAPI(title="Agente Ventas - Marco Yáñez Langer")
 
-# ─── INVENTARIO ────────────────────────────────────────────────────────────────
+# ─── INVENTARIO REAL MARCO YAÑEZ LANGER ────────────────────────────────────────
 
 INVENTARIO_DEMO = [
-    {"Marca":"Toyota","Modelo":"Yaris","Año":2020,"Combustible":"Gasolina","Kilometraje":45000,"Precio":8990000,"Stock":1,"Tipo":"Sedán"},
-    {"Marca":"Suzuki","Modelo":"Swift","Año":2019,"Combustible":"Gasolina","Kilometraje":62000,"Precio":6490000,"Stock":1,"Tipo":"Hatchback"},
-    {"Marca":"Chevrolet","Modelo":"Captiva","Año":2018,"Combustible":"Diesel","Kilometraje":88000,"Precio":9800000,"Stock":1,"Tipo":"SUV"},
-    {"Marca":"Hyundai","Modelo":"Tucson","Año":2021,"Combustible":"Gasolina","Kilometraje":31000,"Precio":13500000,"Stock":1,"Tipo":"SUV"},
-    {"Marca":"Ford","Modelo":"Ranger","Año":2019,"Combustible":"Diesel","Kilometraje":75000,"Precio":14990000,"Stock":2,"Tipo":"Camioneta"},
+    {"Marca":"Dodge","Modelo":"Journey","Año":2017,"Combustible":"Bencina","Kilometraje":150000,"Precio":5990000,"Stock":1,"Tipo":"SUV"},
+    {"Marca":"Geely","Modelo":"LC","Año":2012,"Combustible":"Bencina","Kilometraje":128997,"Precio":3390000,"Stock":1,"Tipo":"Hatchback"},
+    {"Marca":"Toyota","Modelo":"Yaris","Año":2007,"Combustible":"Bencina","Kilometraje":45000,"Precio":3850000,"Stock":1,"Tipo":"Hatchback"},
+    {"Marca":"Ford","Modelo":"Ecosport","Año":2007,"Combustible":"Bencina","Kilometraje":75000,"Precio":3990000,"Stock":1,"Tipo":"SUV"},
+    {"Marca":"Chevrolet","Modelo":"Spark","Año":2011,"Combustible":"Bencina","Kilometraje":62000,"Precio":4690000,"Stock":1,"Tipo":"Hatchback"},
+    {"Marca":"Peugeot","Modelo":"407","Año":2008,"Combustible":"Bencina","Kilometraje":196686,"Precio":4790000,"Stock":1,"Tipo":"Sedán"},
+    {"Marca":"ZNA","Modelo":"Oting","Año":2014,"Combustible":"Bencina","Kilometraje":125000,"Precio":4990000,"Stock":1,"Tipo":"SUV"},
+    {"Marca":"JAC","Modelo":"Trip-J6","Año":2015,"Combustible":"Bencina","Kilometraje":179269,"Precio":5390000,"Stock":1,"Tipo":"Furgón"},
+    {"Marca":"Jeep","Modelo":"Cherokee","Año":2007,"Combustible":"Bencina","Kilometraje":150000,"Precio":5890000,"Stock":1,"Tipo":"SUV"},
 ]
 
 def buscar_autos_simplificado(consulta: str, max_resultados: int = 3) -> str:
