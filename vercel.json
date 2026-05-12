@@ -5,12 +5,32 @@
     {
       "src": "main_production.py",
       "use": "@vercel/python"
+    },
+    {
+      "src": "chat_interactivo.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/test",
       "dest": "main_production.py"
+    },
+    {
+      "src": "/chat",
+      "dest": "chat_interactivo.py"
+    },
+    {
+      "src": "/dashboard_admin",
+      "dest": "main_production.py"
+    },
+    {
+      "src": "/atribuir_venta",
+      "dest": "main_production.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "chat_interactivo.py"
     }
   ],
   "env": {
