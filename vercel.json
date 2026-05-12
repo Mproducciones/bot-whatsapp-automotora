@@ -3,14 +3,14 @@
   "name": "bot-whatsapp-automotora",
   "builds": [
     {
-      "src": "main_simple.py",
+      "src": "main_production.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "main_simple.py"
+      "dest": "main_production.py"
     }
   ],
   "env": {
