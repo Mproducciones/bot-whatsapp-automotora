@@ -14,15 +14,15 @@
   "routes": [
     {
       "src": "/",
-      "dest": "chat_interactivo.py"
+      "dest": "chat_simple.py"
+    },
+    {
+      "src": "/chat",
+      "dest": "chat_simple.py"
     },
     {
       "src": "/test",
       "dest": "main_production.py"
-    },
-    {
-      "src": "/chat",
-      "dest": "chat_interactivo.py"
     },
     {
       "src": "/dashboard_admin",
