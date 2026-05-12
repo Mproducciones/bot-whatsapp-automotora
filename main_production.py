@@ -30,15 +30,19 @@ app = FastAPI(title="Agente Ventas - Marco Yáñez Langer")
 # ─── INVENTARIO REAL MARCO YAÑEZ LANGER ────────────────────────────────────────
 
 INVENTARIO_DEMO = [
-    {"Marca":"Dodge","Modelo":"Journey","Año":2017,"Combustible":"Bencina","Kilometraje":150000,"Precio":5990000,"Stock":1,"Tipo":"SUV"},
-    {"Marca":"Geely","Modelo":"LC","Año":2012,"Combustible":"Bencina","Kilometraje":128997,"Precio":3390000,"Stock":1,"Tipo":"Hatchback"},
-    {"Marca":"Toyota","Modelo":"Yaris","Año":2007,"Combustible":"Bencina","Kilometraje":45000,"Precio":3850000,"Stock":1,"Tipo":"Hatchback"},
-    {"Marca":"Ford","Modelo":"Ecosport","Año":2007,"Combustible":"Bencina","Kilometraje":75000,"Precio":3990000,"Stock":1,"Tipo":"SUV"},
-    {"Marca":"Chevrolet","Modelo":"Spark","Año":2011,"Combustible":"Bencina","Kilometraje":62000,"Precio":4690000,"Stock":1,"Tipo":"Hatchback"},
-    {"Marca":"Peugeot","Modelo":"407","Año":2008,"Combustible":"Bencina","Kilometraje":196686,"Precio":4790000,"Stock":1,"Tipo":"Sedán"},
-    {"Marca":"ZNA","Modelo":"Oting","Año":2014,"Combustible":"Bencina","Kilometraje":125000,"Precio":4990000,"Stock":1,"Tipo":"SUV"},
-    {"Marca":"JAC","Modelo":"Trip-J6","Año":2015,"Combustible":"Bencina","Kilometraje":179269,"Precio":5390000,"Stock":1,"Tipo":"Furgón"},
-    {"Marca":"Jeep","Modelo":"Cherokee","Año":2007,"Combustible":"Bencina","Kilometraje":150000,"Precio":5890000,"Stock":1,"Tipo":"SUV"},
+    {"Marca":"Dodge","Modelo":"Journey","Año":2017,"Combustible":"Bencina","Kilometraje":150000,"Precio":5990000,"Stock":1,"Tipo":"SUV","Origen":"Propio"},
+    {"Marca":"Geely","Modelo":"LC","Año":2012,"Combustible":"Bencina","Kilometraje":128997,"Precio":3390000,"Stock":1,"Tipo":"Hatchback","Origen":"Propio"},
+    {"Marca":"Toyota","Modelo":"Yaris","Año":2007,"Combustible":"Bencina","Kilometraje":45000,"Precio":3850000,"Stock":1,"Tipo":"Hatchback","Origen":"Propio"},
+    {"Marca":"Ford","Modelo":"Ecosport","Año":2007,"Combustible":"Bencina","Kilometraje":75000,"Precio":3990000,"Stock":1,"Tipo":"SUV","Origen":"Propio"},
+    {"Marca":"Chevrolet","Modelo":"Spark","Año":2011,"Combustible":"Bencina","Kilometraje":62000,"Precio":4690000,"Stock":1,"Tipo":"Hatchback","Origen":"Propio"},
+    {"Marca":"Peugeot","Modelo":"407","Año":2008,"Combustible":"Bencina","Kilometraje":196686,"Precio":4790000,"Stock":1,"Tipo":"Sedán","Origen":"Propio"},
+    {"Marca":"ZNA","Modelo":"Oting","Año":2014,"Combustible":"Bencina","Kilometraje":125000,"Precio":4990000,"Stock":1,"Tipo":"SUV","Origen":"Propio"},
+    {"Marca":"JAC","Modelo":"Trip-J6","Año":2015,"Combustible":"Bencina","Kilometraje":179269,"Precio":5390000,"Stock":1,"Tipo":"Furgón","Origen":"Propio"},
+    {"Marca":"Jeep","Modelo":"Cherokee","Año":2007,"Combustible":"Bencina","Kilometraje":150000,"Precio":5890000,"Stock":1,"Tipo":"SUV","Origen":"Propio"},
+    # Vehículos en Consignación
+    {"Marca":"Suzuki","Modelo":"Swift","Año":2019,"Combustible":"Bencina","Kilometraje":85000,"Precio":4290000,"Stock":1,"Tipo":"Hatchback","Origen":"Consignación","Dueño":"Cliente-001"},
+    {"Marca":"Hyundai","Modelo":"Tucson","Año":2018,"Combustible":"Bencina","Kilometraje":95000,"Precio":8500000,"Stock":1,"Tipo":"SUV","Origen":"Consignación","Dueño":"Cliente-002"},
+    {"Marca":"Nissan","Modelo":"Sentra","Año":2020,"Combustible":"Bencina","Kilometraje":45000,"Precio":7200000,"Stock":1,"Tipo":"Sedán","Origen":"Consignación","Dueño":"Cliente-003"},
 ]
 
 def buscar_autos_simplificado(consulta: str, max_resultados: int = 3) -> str:
@@ -85,7 +89,11 @@ def buscar_autos_simplificado(consulta: str, max_resultados: int = 3) -> str:
     for auto in disponibles:
         precio = f"${int(auto['Precio']):,}".replace(",",".") 
         km = f"{int(auto['Kilometraje']):,} kms".replace(",",".") 
-        lineas.append(f"• {auto['Marca']} {auto['Modelo']} {auto.get('Año','')} | {auto.get('Combustible','')} | {km} | {precio}")
+        origen = auto.get('Origen', 'Propio')
+        if origen == 'Consignación':
+            lineas.append(f"• {auto['Marca']} {auto['Modelo']} {auto.get('Año','')} | {auto.get('Combustible','')} | {km} | {precio} 🏷️")
+        else:
+            lineas.append(f"• {auto['Marca']} {auto['Modelo']} {auto.get('Año','')} | {auto.get('Combustible','')} | {km} | {precio}")
     
     return prefijo + "\n".join(lineas)
 
@@ -102,15 +110,24 @@ async def consultar_groq(mensaje: str, stock_context: str) -> str:
 Reglas:
 1. Español chileno natural, cálido, para WhatsApp. Máximo 3-4 párrafos cortos.
 2. Ayuda a encontrar el vehículo según el stock disponible.
-3. Invita a visitar: Lunes-Viernes 09:30-19:30 hrs.
-4. Crédito automotriz: 1 año antigüedad laboral, renta mínima $350.000, buen informe comercial.
-5. NO inventes precios ni datos que no están en el stock.
-6. Si no hay stock del auto buscado, ofrece alternativas similares.
-7. Emojis con moderación (máximo 2 por mensaje).
-8. Contacto: 📱 +56 9 8808 3279 | 🌐 automotorarancagua.com
+3. Los vehículos marcados con 🏷️ están en consignación (dueños particulares vendiendo a través nuestra).
+4. Si alguien quiere vender su auto, ofrecer servicio de consignación online.
+5. Invita a visitar: Lunes-Viernes 09:30-19:30 hrs.
+6. Crédito automotriz: 1 año antigüedad laboral, renta mínima $350.000, buen informe comercial.
+7. NO inventes precios ni datos que no están en el stock.
+8. Si no hay stock del auto buscado, ofrece alternativas similares.
+9. Emojis con moderación (máximo 2 por mensaje).
+10. Contacto: 📱 +56 9 8808 3279 | 🌐 automotorarancagua.com
 
 STOCK DISPONIBLE:
-{stock_context}"""
+{stock_context}
+
+SERVICIO DE CONSIGNACIÓN:
+- Vendemos tu auto por ti sin estrés
+- Máximo valor de venta vs venta directa
+- Nos encargamos de toda la documentación
+- Publicación en todas nuestras plataformas
+- Solo pagas comisión cuando vendemos"""
 
     payload = {
         "model": GROQ_MODEL,
