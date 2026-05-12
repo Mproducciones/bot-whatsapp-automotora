@@ -255,18 +255,27 @@ async def chat_interface():
                     })
                 });
                 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 
                 // Ocultar indicador de escritura
                 hideTyping();
                 
                 // Agregar respuesta del bot
-                addMessage(data.respuesta, false);
-                messageHistory.push({role: 'assistant', content: data.respuesta});
+                if (data.error) {
+                    addMessage('Error: ' + data.respuesta, false);
+                } else {
+                    addMessage(data.respuesta, false);
+                    messageHistory.push({role: 'assistant', content: data.respuesta});
+                }
                 
             } catch (error) {
                 hideTyping();
-                addMessage('Lo siento, tuve un problema técnico. Por favor contáctanos directamente al +56 9 8808 3279 😊', false);
+                console.error('Error en sendMessage:', error);
+                addMessage('Lo siento, tuve un problema técnico. Por favor recarga la página y vuelve a intentar. 😊', false);
             }
         }
     </script>
